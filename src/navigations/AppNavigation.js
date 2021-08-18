@@ -4,6 +4,7 @@ import {NavigationContainer,DefaultTheme } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import CategoriesScreen from '../pages/Categories/CategoriesScreen';
 import FavoriteList from '../pages/FavoriteList';
+import ProductScreen from '../pages/Products/ProductScreen'
 // Font Awesome Icons...
 import { FontAwesome5 } from '@expo/vector-icons'
 import { View,Animated } from 'react-native';
@@ -15,19 +16,18 @@ import { connect } from 'react-redux';
 function MainNavigator() {
   return(
     <Stack.Navigator
-      screenOptions={{
-          headerTitleStyle: {
-            fontWeight: 'bold',
-            textAlign: 'center',
-            alignSelf: 'center',
-            flex: 1,
-          }
-      }}
+     
     >
-      <Stack.Screen name='Home' component={FavoriteList} />
-      <Stack.Screen name='Categories' component={ProductsList}/>
-      <Stack.Screen name='Favorite ' component={FavoriteList}/>
-      <Stack.Screen name='Profile' component={FavoriteList}/>
+      
+      <Stack.Screen name='Categories' component={CategoriesScreen}
+      options={{headerStyle: {
+        backgroundColor: '#f4511e',
+      },}}/>
+
+      <Stack.Screen name='Product' component={ProductScreen}
+       options={{headerStyle: {
+        backgroundColor: '#f4511e',
+      },}}/>
     </Stack.Navigator>
   )
 } 
@@ -76,7 +76,7 @@ const BottomTabNavigato=(props)=> {
                         
                         
                       }}>
-                        <Tab.Screen name='Home' component={CategoriesScreen} options={{
+                        <Tab.Screen name='Home' component={FavoriteList} options={{
                                 tabBarIcon: ({ focused }) => (
                                     <View style={{
                                     // centring Tab Button...
@@ -89,8 +89,9 @@ const BottomTabNavigato=(props)=> {
                                         color={focused ? 'red' : 'gray'}
                                     ></FontAwesome5>
                                     </View>)}} />
-                        <Tab.Screen name='Categories' component={CategoriesScreen}
+                        <Tab.Screen name='Categories' component={MainNavigator}
                         options={{
+                          headerShown:false,
                             tabBarIcon: ({ focused }) => (
                                 <View style={{
                                 // centring Tab Button...
@@ -119,7 +120,7 @@ const BottomTabNavigato=(props)=> {
                                     ></FontAwesome5>
                                     </View>
                                 ),
-                                tabBarBadge:countLike==0?false:countLike
+                                // tabBarBadge:countLike==0?false:countLike
         }}/>
                         <Tab.Screen name='Profile' component={FavoriteList}options={{
                                 tabBarIcon: ({ focused }) => (

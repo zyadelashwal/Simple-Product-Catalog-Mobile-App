@@ -25,7 +25,7 @@ function getProducts() {
 }
 
 function getProductsSuccess(data) {
-console.log(data)
+
   return {
       type: FETCH_PRODUCTS_SUCCESS,
       data

@@ -41,18 +41,15 @@ const windowHeight = Dimensions.get('window').height;
   onPressCategory = (item) => {
     this.setState({SelectedCategory:item})
     console.log(this.state.SelectedCategory,item)
-    // this.props.navigation.navigate('RecipesList', { category, title });
   };
 
   onPressProduct = (item) => {
-    this.setState({SelectedCategory:item})
-    console.log(this.state.SelectedCategory,item)
-    // this.props.navigation.navigate('RecipesList', { category, title });
+      this.props.navigation.navigate('Product', { PrdudctItem:item });
   };
 
-  //  ProductsFilter(params) {
-  //   return params;
-  // }
+   ProductsFilter(params) {
+    return params;
+  }
 
   renderCategory = ({ item }) => (
     <TouchableOpacity 
@@ -67,20 +64,23 @@ const windowHeight = Dimensions.get('window').height;
   renderProducts = ({ item }) => (
     <TouchableOpacity 
      onPress={() => this.onPressProduct(item)}>
-      <View style={[styles.categoriesItemContainer,
+      <View style={[styles.productItemContainer,
         {backgroundColor:'white',
         width:(windowWidth/2)-20
         }]}>
 
-        <Image style={[styles.categoriesPhoto,{width:(windowWidth/2)-20,height:110}]} resizeMode={'contain'} source={{ uri: item.image }} />
-        <IconButton
-          
-          icon={<Icon style={{position:'absolute',right:0,bottom:2}}
-           size="md" as={<FontAwesome5 name="heart" />} color="black" />}
-        />
-        <Text style={styles.categoriesName} numberOfLines={1}>{item.title}</Text>
-        <Text style={styles.categoriesInfo}>{item.price} $</Text>
-      </View>
+        <Image style={[styles.categoriesPhoto,{width:(windowWidth/2)-20,height:110}]} resizeMode={'center'}  source={{ uri: item.image }} />
+       <TouchableOpacity style={{borderRadius:"100%",backgroundColor:"red",left:(windowWidth/4)-20}}>
+       <Icon 
+           size={5} as={<FontAwesome5 name="heart" />} color="black" />
+       </TouchableOpacity>
+       
+        </View>
+        <View>
+            <Text style={styles.categoriesName} numberOfLines={2}>{item.title}</Text>
+            <Text style={styles.categoriesName}>{item.price} $</Text>
+        </View>
+       
     </TouchableOpacity>
   );
 
@@ -88,13 +88,20 @@ const windowHeight = Dimensions.get('window').height;
     return (
       <NativeBaseProvider>
 
-
-        <FlatList
-        horizontal={true}
-          data={this.props.Categories}
-          renderItem={this.renderCategory}
-          keyExtractor={item => `${item}`}
-        />
+      <View>
+          <FlatList
+          horizontal={true}
+            data={this.props.Categories}
+            renderItem={this.renderCategory}
+            keyExtractor={item => `${item}`}
+          />
+        </View>
+        
+        <View>{
+          this.props.Products.length>0&&
+            <Text>{this.props.Products.length} Items</Text>
+}
+        </View>
         <View>
          
             <FlatList
