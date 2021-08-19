@@ -31,9 +31,11 @@ const windowHeight = Dimensions.get('window').height;
 
 
   render() {
+   const item= this.props.route.params.PrdudctItem
     return (
       <NativeBaseProvider>
-
+          <Text>{item.title}</Text>
+          <Text>{item.price} $</Text>
         </NativeBaseProvider>
     );
   }

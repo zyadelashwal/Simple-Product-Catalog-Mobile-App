@@ -27,9 +27,9 @@ const windowHeight = Dimensions.get('window').height;
   constructor(props) {
     super(props);
     this.state={
-      data:null,
+      ProdectsData:[],
       SelectedCategory:'all',
-      colorSelect:false
+      isLoading:false
     }
   }
 
@@ -37,25 +37,36 @@ const windowHeight = Dimensions.get('window').height;
    await this.props.fetchCategories();
    await this.props.fetchProducts();
 
+
   }
   onPressCategory = (item) => {
     this.setState({SelectedCategory:item})
-    console.log(this.state.SelectedCategory,item)
+    
+    this.ProductsFilter();
   };
 
   onPressProduct = (item) => {
       this.props.navigation.navigate('Product', { PrdudctItem:item });
   };
 
-   ProductsFilter(params) {
-    return params;
+   ProductsFilter() {
+    if(this.state.SelectedCategory=="all")
+    {
+      this.setState({ProdectsData:this.props.Products})
+
+    }else
+    {
+      const result = this.props.Products.filter(item => item.category == this.state.SelectedCategory);
+      this.setState({ProdectsData:result})
+
+    }
+    
   }
 
   renderCategory = ({ item }) => (
     <TouchableOpacity 
      onPress={() => this.onPressCategory(item)}>
-      <View style={[styles.categoriesItemContainer,
-        {backgroundColor:this.state.SelectedCategory==item?'orange':false}]}>
+      <View style={[styles.categoriesItemContainer,{backgroundColor:this.state.SelectedCategory===item?'orange':"white"}]}>
         <Text style={styles.categoriesName}>{item}</Text>
       </View>
     </TouchableOpacity>
@@ -70,7 +81,8 @@ const windowHeight = Dimensions.get('window').height;
         }]}>
 
         <Image style={[styles.categoriesPhoto,{width:(windowWidth/2)-20,height:110}]} resizeMode={'center'}  source={{ uri: item.image }} />
-       <TouchableOpacity style={{borderRadius:"100%",backgroundColor:"red",left:(windowWidth/4)-20}}>
+
+       <TouchableOpacity style={{borderRadius:"100%",width:50,height:50,backgroundColor:"white",left:(windowWidth/4)-20}}>
        <Icon 
            size={5} as={<FontAwesome5 name="heart" />} color="black" />
        </TouchableOpacity>
@@ -85,12 +97,14 @@ const windowHeight = Dimensions.get('window').height;
   );
 
   render() {
+    (this.props.Products.length>0&&this.state.ProdectsData.length==0)&& await this.setState({ProdectsData:this.props.Products })
+
     return (
       <NativeBaseProvider>
 
       <View>
           <FlatList
-          horizontal={true}
+            horizontal={true}
             data={this.props.Categories}
             renderItem={this.renderCategory}
             keyExtractor={item => `${item}`}
@@ -98,15 +112,15 @@ const windowHeight = Dimensions.get('window').height;
         </View>
         
         <View>{
-          this.props.Products.length>0&&
-            <Text>{this.props.Products.length} Items</Text>
+          this.state.ProdectsData.length>0&&
+            <Text>{this.state.ProdectsData.length} Items</Text>
 }
         </View>
         <View>
          
             <FlatList
           
-            data={this.props.Products}
+            data={this.state.ProdectsData}
             renderItem={this.renderProducts}
             numColumns={2}
             keyExtractor={item => `${item.id}`}
